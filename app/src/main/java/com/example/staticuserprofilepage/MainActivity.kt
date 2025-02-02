@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StaticUserProfilePageTheme {
+                // adding the snackbar host to scaffold so that the messages show up on bottom
                 val snackbarHostState = remember { SnackbarHostState() }
 
                 Scaffold(
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .padding(innerPadding),
                         snackbarHostState = snackbarHostState
+                        // passing the snackbar host to user profile function as a parameter
                     )
                 }
             }
@@ -54,12 +56,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun UserProfile(modifier: Modifier = Modifier, snackbarHostState: SnackbarHostState) {
-    val isFollowing = remember { mutableStateOf(false) }
+    val isFollowing = remember { mutableStateOf(false) } // keeping track of following or not
 
     val snackbarMessage = if (isFollowing.value) {
-        "You are now following the user."
+        "You are now following the user"
+        // if isFollowing is now true, display that they have followed the user in snackbar
     } else {
-        "You have unfollowed the user."
+        "You have unfollowed the user"
+        // if isFollowing is now false, display that they have unfollowed the user in snackbar
     }
 
     Row(
@@ -91,9 +95,11 @@ fun UserProfile(modifier: Modifier = Modifier, snackbarHostState: SnackbarHostSt
             )
 
             Button(onClick = {
+                // when the button is clicked, complement the value of isFollowing
                 isFollowing.value = !isFollowing.value
             }) {
                 Text(text = if (isFollowing.value) "Following" else "Follow")
+                // change the text on button accordingly
             }
 
             LaunchedEffect(isFollowing.value) {
@@ -103,6 +109,7 @@ fun UserProfile(modifier: Modifier = Modifier, snackbarHostState: SnackbarHostSt
     }
     LaunchedEffect(snackbarHostState) {
         snackbarHostState.showSnackbar(snackbarMessage)
+        // launches the message
     }
 }
 
